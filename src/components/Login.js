@@ -3,16 +3,35 @@ import {useHistory} from 'react-router-dom';
 import axiosWithAuth from '../helpers/axiosWithAuth.js';
 
 const Login = () => {
+  const {push} = useHistory();
+
+  const [error, setError] = useState('');
   const [credentials, setCredentials] = useState({
     username: '',
     password: ''
   })
 
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
+  const handleChange = (event) => {
+    setCredentials({
+        ...credentials,
+        [event.target.name]: event.target.value,
+    })
+}
 
-  const error = "";
-  //replace with error state
+const clickLogin = (event) => {
+    event.preventDefault();
+
+    axiosWithAuth().post('/login', credentials)
+                   .then(res => {
+                       console.log(res)
+                       localStorage.setItem('token', res.data.payload);
+                       push('/bubblepage');
+                   })
+                   .catch(err => {
+                       if(err.response.status===403){setError('Username or Password not valid.');}
+                       console.error('uh-oh, something went wrong', err)})
+}
+
 
   return (
     <div>
@@ -21,6 +40,7 @@ const Login = () => {
         <form onSubmit={clickLogin}>
           <label>Username:
             <input type='text'
+                   id='username'
                    name='username'
                    value={credentials.username}
                    onChange={handleChange}
@@ -29,17 +49,19 @@ const Login = () => {
 
           <label>Password:
             <input type='text'
+                   id='password'
                    name='password'
                    value={credentials.password}
                    onChange={handleChange}
             />
           </label>
 
-          <button type='submit'>Log-in</button>
+          <button type='submit'
+                  id='submit'>Log-in</button>
         </form>
       </div>
 
-      <p id="error" className="error">{error}</p>
+      {error && <p id="error" className="error">{error}</p>}
     </div>
   );
 };
