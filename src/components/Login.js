@@ -18,20 +18,21 @@ const Login = () => {
     })
 }
 
-const clickLogin = (event) => {
+  const clickLogin = (event) => {
     event.preventDefault();
 
     axiosWithAuth().post('/login', credentials)
                    .then(res => {
-                       console.log(res)
                        localStorage.setItem('token', res.data.payload);
                        push('/bubblepage');
                    })
                    .catch(err => {
                        if(err.response.status===403){setError('Username or Password not valid.');}
                        console.error('uh-oh, something went wrong', err)})
-}
+  }
 
+
+console.log(localStorage);
 
   return (
     <div>

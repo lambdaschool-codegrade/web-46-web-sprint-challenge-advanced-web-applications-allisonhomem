@@ -4,15 +4,29 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/Login";
 import PrivateRoute from './components/PrivateRoute.js';
 import BubblePage from './components/BubblePage.js';
+
+import axiosWithAuth from './helpers/axiosWithAuth.js';
+
 import "./styles.scss";
 
 function App() {
+
+  const clickLogout = () => {
+    axiosWithAuth().post('/logout')
+                   .then(res => {
+                         console.log(res)
+                         localStorage.removeItem('token');
+                   })
+                   .catch(err => {
+                          console.error('uh-oh, something went wrong', err)})
+  }
+
   return (
     <Router>
       <div className="App">
         <header>
           Color Picker Sprint Challenge
-          <a data-testid="logoutButton" href="#">logout</a>
+          <a data-testid="logoutButton" href="/" onClick={clickLogout}>logout</a>
         </header>
 
         <Switch>
