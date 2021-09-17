@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Login from "./components/Login";
@@ -14,11 +14,10 @@ function App() {
   const clickLogout = () => {
     axiosWithAuth().post('/logout')
                    .then(res => {
-                         console.log(res)
                          localStorage.removeItem('token');
-                   })
-                   .catch(err => {
-                          console.error('uh-oh, something went wrong', err)})
+                         window.location.href = '/'})
+                   .catch(err => 
+                          console.error('uh-oh, something went wrong while trying to logout', err))
   }
 
   return (
@@ -26,7 +25,7 @@ function App() {
       <div className="App">
         <header>
           Color Picker Sprint Challenge
-          <a data-testid="logoutButton" href="/" onClick={clickLogout}>logout</a>
+          <a data-testid="logoutButton" href='#' onClick={clickLogout}>logout</a>
         </header>
 
         <Switch>

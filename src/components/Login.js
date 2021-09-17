@@ -28,11 +28,8 @@ const Login = () => {
                    })
                    .catch(err => {
                        if(err.response.status===403){setError('Username or Password not valid.');}
-                       console.error('uh-oh, something went wrong', err)})
+                       console.error('uh-oh, something went wrong while trying to login', err)})
   }
-
-
-console.log(localStorage);
 
   return (
     <div>
